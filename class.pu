@@ -1,0 +1,102 @@
+@startuml class diagram
+
+class GPIO模块
+
+class PWM模块
+
+class Buzzer模块{
+    - buzzerChannel = 4
+    - {field} volume = GPIO.PWM(buzzerChannel, 1000)
+    + buzzerOn(t=0.2)
+    + buzzerOnWith(t=0.5, v=10)
+}
+Buzzer模块 ..> GPIO模块: 依赖
+Buzzer模块 ..> PWM模块: 依赖
+
+class Color模块{
+    + myColor : Enum
+    + test()
+}
+
+Enum myColor{
+    + BLACK
+    + RED
+    + BRIGHTRED
+    + GREEN
+    + BLUE
+    + YELLOW
+    + MAGENTA
+    + CYAN
+    + WHITE
+    + __init__(self,r,g,b)
+    + getValue(self)
+    + getRed(self)
+    + getGreen(self)
+    + getBlue(self)
+}
+myColor --> Color模块: 组成
+
+class LED模块{
+    + setSingleColor(no=0, color=myColor.BLACK)
+    + setColor(color=myColor.BLACK)
+    + cleanColor()
+    + test()
+}
+LED模块 ..> Color模块: 依赖
+
+class WheelControl模块{
+    - leftChannelList = [13,12]
+    - leftCONTROL = 6
+    - rightChannelList = [21,20]
+    - rightCONTROL = 26
+    - {field} leftSpeed = GPIO.PWM(leftCONTROL, 1000)
+    - {field} rightSpeed = GPIO.PWM(rightCONTROL, 1000)
+
+    + Forward(t = 0.5, v = 50)
+    + Backward(t = 0.5, v = 30)
+    + Turn(isRight = True, t = 0.5, v = 10)
+    + test()
+}
+WheelControl模块 ..> GPIO模块: 依赖
+WheelControl模块 ..> PWM模块: 依赖
+
+class irsensors模块{
+    - CS = 5
+    - CLOCK = 25
+    - ADDRESS = 24
+    - DATAOUT = 23
+    + AnalogRead()
+}
+irsensors模块 ..> GPIO模块
+
+class linetracking模块{
+    + autoTracking()
+    - canGo(value)
+}
+linetracking模块 ..> irsensors模块: 依赖
+linetracking模块 ..> WheelControl模块: 依赖
+
+class ircontrolmove模块{
+    - IR = 17
+    - keymap
+
+    +getkey()
+}
+ircontrolmove模块 ..> GPIO模块: 依赖
+ircontrolmove模块 ..> LED模块: 依赖
+ircontrolmove模块 ..> WheelControl模块: 依赖
+
+class iravoidance模块{
+    - IR_frontR = 19
+    - IR_frontL = 16
+
+    - LEDflash(color, t = 0.2)
+    + autoObstacleAvoiding()
+}
+iravoidance模块 ..> GPIO模块: 依赖
+iravoidance模块 ..> Color模块: 依赖
+iravoidance模块 ..> LED模块: 依赖
+iravoidance模块 ..> Buzzer模块: 依赖
+iravoidance模块 ..> WheelControl模块: 依赖
+
+@enduml
