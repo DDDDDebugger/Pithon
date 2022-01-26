@@ -3,6 +3,7 @@
 class GPIO模块
 
 class PWM模块
+PWM模块 --> GPIO模块: 组成
 
 class Buzzer模块{
     - buzzerChannel = 4
@@ -11,7 +12,6 @@ class Buzzer模块{
     + buzzerOnWith(t=0.5, v=10)
 }
 Buzzer模块 ..> GPIO模块: 依赖
-Buzzer模块 ..> PWM模块: 依赖
 
 class Color模块{
     + myColor : Enum
@@ -58,7 +58,6 @@ class WheelControl模块{
     + test()
 }
 WheelControl模块 ..> GPIO模块: 依赖
-WheelControl模块 ..> PWM模块: 依赖
 
 class irsensors模块{
     - CS = 5
